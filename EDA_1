@@ -1,0 +1,1468 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "kernelspec": {
+      "display_name": "Python 3",
+      "language": "python",
+      "name": "python3"
+    },
+    "language_info": {
+      "codemirror_mode": {
+        "name": "ipython",
+        "version": 3
+      },
+      "file_extension": ".py",
+      "mimetype": "text/x-python",
+      "name": "python",
+      "nbconvert_exporter": "python",
+      "pygments_lexer": "ipython3",
+      "version": "3.7.4"
+    },
+    "colab": {
+      "name": "EDA_1_Latest.ipynb",
+      "provenance": [],
+      "include_colab_link": true
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/dinesbshajj/dinesbshajj/blob/main/EDA_1\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "joCcK9wgXioR"
+      },
+      "source": [
+        "# Exploratory Data Analysis"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "3wuqt-bPXioX",
+        "outputId": "c43707e7-c886-4933-93c2-1288ed42e60e"
+      },
+      "source": [
+        "!pip install pandas_profiling\n",
+        "!pip install sweetviz"
+      ],
+      "execution_count": 2,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Requirement already satisfied: pandas_profiling in /usr/local/lib/python3.7/dist-packages (1.4.1)\n",
+            "Requirement already satisfied: pandas>=0.19 in /usr/local/lib/python3.7/dist-packages (from pandas_profiling) (1.1.5)\n",
+            "Requirement already satisfied: six>=1.9 in /usr/local/lib/python3.7/dist-packages (from pandas_profiling) (1.15.0)\n",
+            "Requirement already satisfied: matplotlib>=1.4 in /usr/local/lib/python3.7/dist-packages (from pandas_profiling) (3.2.2)\n",
+            "Requirement already satisfied: jinja2>=2.8 in /usr/local/lib/python3.7/dist-packages (from pandas_profiling) (2.11.3)\n",
+            "Requirement already satisfied: MarkupSafe>=0.23 in /usr/local/lib/python3.7/dist-packages (from jinja2>=2.8->pandas_profiling) (2.0.1)\n",
+            "Requirement already satisfied: kiwisolver>=1.0.1 in /usr/local/lib/python3.7/dist-packages (from matplotlib>=1.4->pandas_profiling) (1.3.2)\n",
+            "Requirement already satisfied: cycler>=0.10 in /usr/local/lib/python3.7/dist-packages (from matplotlib>=1.4->pandas_profiling) (0.11.0)\n",
+            "Requirement already satisfied: python-dateutil>=2.1 in /usr/local/lib/python3.7/dist-packages (from matplotlib>=1.4->pandas_profiling) (2.8.2)\n",
+            "Requirement already satisfied: numpy>=1.11 in /usr/local/lib/python3.7/dist-packages (from matplotlib>=1.4->pandas_profiling) (1.19.5)\n",
+            "Requirement already satisfied: pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.1 in /usr/local/lib/python3.7/dist-packages (from matplotlib>=1.4->pandas_profiling) (2.4.7)\n",
+            "Requirement already satisfied: pytz>=2017.2 in /usr/local/lib/python3.7/dist-packages (from pandas>=0.19->pandas_profiling) (2018.9)\n",
+            "Collecting sweetviz\n",
+            "  Downloading sweetviz-2.1.3-py3-none-any.whl (15.1 MB)\n",
+            "\u001b[K     |████████████████████████████████| 15.1 MB 183 kB/s \n",
+            "\u001b[?25hRequirement already satisfied: tqdm>=4.43.0 in /usr/local/lib/python3.7/dist-packages (from sweetviz) (4.62.3)\n",
+            "Requirement already satisfied: scipy>=1.3.2 in /usr/local/lib/python3.7/dist-packages (from sweetviz) (1.4.1)\n",
+            "Requirement already satisfied: jinja2>=2.11.1 in /usr/local/lib/python3.7/dist-packages (from sweetviz) (2.11.3)\n",
+            "Requirement already satisfied: pandas!=1.0.0,!=1.0.1,!=1.0.2,>=0.25.3 in /usr/local/lib/python3.7/dist-packages (from sweetviz) (1.1.5)\n",
+            "Requirement already satisfied: numpy>=1.16.0 in /usr/local/lib/python3.7/dist-packages (from sweetviz) (1.19.5)\n",
+            "Requirement already satisfied: importlib-resources>=1.2.0 in /usr/local/lib/python3.7/dist-packages (from sweetviz) (5.4.0)\n",
+            "Requirement already satisfied: matplotlib>=3.1.3 in /usr/local/lib/python3.7/dist-packages (from sweetviz) (3.2.2)\n",
+            "Requirement already satisfied: zipp>=3.1.0 in /usr/local/lib/python3.7/dist-packages (from importlib-resources>=1.2.0->sweetviz) (3.6.0)\n",
+            "Requirement already satisfied: MarkupSafe>=0.23 in /usr/local/lib/python3.7/dist-packages (from jinja2>=2.11.1->sweetviz) (2.0.1)\n",
+            "Requirement already satisfied: python-dateutil>=2.1 in /usr/local/lib/python3.7/dist-packages (from matplotlib>=3.1.3->sweetviz) (2.8.2)\n",
+            "Requirement already satisfied: cycler>=0.10 in /usr/local/lib/python3.7/dist-packages (from matplotlib>=3.1.3->sweetviz) (0.11.0)\n",
+            "Requirement already satisfied: pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.1 in /usr/local/lib/python3.7/dist-packages (from matplotlib>=3.1.3->sweetviz) (2.4.7)\n",
+            "Requirement already satisfied: kiwisolver>=1.0.1 in /usr/local/lib/python3.7/dist-packages (from matplotlib>=3.1.3->sweetviz) (1.3.2)\n",
+            "Requirement already satisfied: pytz>=2017.2 in /usr/local/lib/python3.7/dist-packages (from pandas!=1.0.0,!=1.0.1,!=1.0.2,>=0.25.3->sweetviz) (2018.9)\n",
+            "Requirement already satisfied: six>=1.5 in /usr/local/lib/python3.7/dist-packages (from python-dateutil>=2.1->matplotlib>=3.1.3->sweetviz) (1.15.0)\n",
+            "Installing collected packages: sweetviz\n",
+            "Successfully installed sweetviz-2.1.3\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "OVtpOJPfXioa"
+      },
+      "source": [
+        "#load the libraries\n",
+        "import pandas as pd\n",
+        "import numpy as np\n",
+        "import pandas_profiling as pp\n",
+        "import sweetviz as sv"
+      ],
+      "execution_count": 4,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "nerzyfMoYHEE"
+      },
+      "source": [
+        ""
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "2oXideVMXioa"
+      },
+      "source": [
+        "data1 = pd.read_csv(\"data_clean.csv\")"
+      ],
+      "execution_count": 5,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 417
+        },
+        "id": "EK_GEQ60Xiob",
+        "outputId": "73457475-641d-433c-f342-369719bb4e7a"
+      },
+      "source": [
+        "data1"
+      ],
+      "execution_count": 6,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>Unnamed: 0</th>\n",
+              "      <th>Ozone</th>\n",
+              "      <th>Solar.R</th>\n",
+              "      <th>Wind</th>\n",
+              "      <th>Temp C</th>\n",
+              "      <th>Month</th>\n",
+              "      <th>Day</th>\n",
+              "      <th>Year</th>\n",
+              "      <th>Temp</th>\n",
+              "      <th>Weather</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>1</td>\n",
+              "      <td>41.0</td>\n",
+              "      <td>190.0</td>\n",
+              "      <td>7.4</td>\n",
+              "      <td>67</td>\n",
+              "      <td>5</td>\n",
+              "      <td>1</td>\n",
+              "      <td>2010</td>\n",
+              "      <td>67</td>\n",
+              "      <td>S</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>2</td>\n",
+              "      <td>36.0</td>\n",
+              "      <td>118.0</td>\n",
+              "      <td>8.0</td>\n",
+              "      <td>72</td>\n",
+              "      <td>5</td>\n",
+              "      <td>2</td>\n",
+              "      <td>2010</td>\n",
+              "      <td>72</td>\n",
+              "      <td>C</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>3</td>\n",
+              "      <td>12.0</td>\n",
+              "      <td>149.0</td>\n",
+              "      <td>12.6</td>\n",
+              "      <td>74</td>\n",
+              "      <td>5</td>\n",
+              "      <td>3</td>\n",
+              "      <td>2010</td>\n",
+              "      <td>74</td>\n",
+              "      <td>PS</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>4</td>\n",
+              "      <td>18.0</td>\n",
+              "      <td>313.0</td>\n",
+              "      <td>11.5</td>\n",
+              "      <td>62</td>\n",
+              "      <td>5</td>\n",
+              "      <td>4</td>\n",
+              "      <td>2010</td>\n",
+              "      <td>62</td>\n",
+              "      <td>S</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>4</th>\n",
+              "      <td>5</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>14.3</td>\n",
+              "      <td>56</td>\n",
+              "      <td>5</td>\n",
+              "      <td>5</td>\n",
+              "      <td>2010</td>\n",
+              "      <td>56</td>\n",
+              "      <td>S</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>...</th>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>153</th>\n",
+              "      <td>154</td>\n",
+              "      <td>41.0</td>\n",
+              "      <td>190.0</td>\n",
+              "      <td>7.4</td>\n",
+              "      <td>67</td>\n",
+              "      <td>5</td>\n",
+              "      <td>1</td>\n",
+              "      <td>2010</td>\n",
+              "      <td>67</td>\n",
+              "      <td>C</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>154</th>\n",
+              "      <td>155</td>\n",
+              "      <td>30.0</td>\n",
+              "      <td>193.0</td>\n",
+              "      <td>6.9</td>\n",
+              "      <td>70</td>\n",
+              "      <td>9</td>\n",
+              "      <td>26</td>\n",
+              "      <td>2010</td>\n",
+              "      <td>70</td>\n",
+              "      <td>PS</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>155</th>\n",
+              "      <td>156</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>145.0</td>\n",
+              "      <td>13.2</td>\n",
+              "      <td>77</td>\n",
+              "      <td>9</td>\n",
+              "      <td>27</td>\n",
+              "      <td>2010</td>\n",
+              "      <td>77</td>\n",
+              "      <td>S</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>156</th>\n",
+              "      <td>157</td>\n",
+              "      <td>14.0</td>\n",
+              "      <td>191.0</td>\n",
+              "      <td>14.3</td>\n",
+              "      <td>75</td>\n",
+              "      <td>9</td>\n",
+              "      <td>28</td>\n",
+              "      <td>2010</td>\n",
+              "      <td>75</td>\n",
+              "      <td>S</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>157</th>\n",
+              "      <td>158</td>\n",
+              "      <td>18.0</td>\n",
+              "      <td>131.0</td>\n",
+              "      <td>8.0</td>\n",
+              "      <td>76</td>\n",
+              "      <td>9</td>\n",
+              "      <td>29</td>\n",
+              "      <td>2010</td>\n",
+              "      <td>76</td>\n",
+              "      <td>C</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "<p>158 rows × 10 columns</p>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "     Unnamed: 0  Ozone  Solar.R  Wind Temp C Month  Day  Year  Temp Weather\n",
+              "0             1   41.0    190.0   7.4     67     5    1  2010    67       S\n",
+              "1             2   36.0    118.0   8.0     72     5    2  2010    72       C\n",
+              "2             3   12.0    149.0  12.6     74     5    3  2010    74      PS\n",
+              "3             4   18.0    313.0  11.5     62     5    4  2010    62       S\n",
+              "4             5    NaN      NaN  14.3     56     5    5  2010    56       S\n",
+              "..          ...    ...      ...   ...    ...   ...  ...   ...   ...     ...\n",
+              "153         154   41.0    190.0   7.4     67     5    1  2010    67       C\n",
+              "154         155   30.0    193.0   6.9     70     9   26  2010    70      PS\n",
+              "155         156    NaN    145.0  13.2     77     9   27  2010    77       S\n",
+              "156         157   14.0    191.0  14.3     75     9   28  2010    75       S\n",
+              "157         158   18.0    131.0   8.0     76     9   29  2010    76       C\n",
+              "\n",
+              "[158 rows x 10 columns]"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 6
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 357
+        },
+        "id": "Ub-CDxSWXiob",
+        "outputId": "d82de01d-2ffd-4433-e96e-0295588c061f"
+      },
+      "source": [
+        "data1.tail(10)"
+      ],
+      "execution_count": 7,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>Unnamed: 0</th>\n",
+              "      <th>Ozone</th>\n",
+              "      <th>Solar.R</th>\n",
+              "      <th>Wind</th>\n",
+              "      <th>Temp C</th>\n",
+              "      <th>Month</th>\n",
+              "      <th>Day</th>\n",
+              "      <th>Year</th>\n",
+              "      <th>Temp</th>\n",
+              "      <th>Weather</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>148</th>\n",
+              "      <td>149</td>\n",
+              "      <td>30.0</td>\n",
+              "      <td>193.0</td>\n",
+              "      <td>6.9</td>\n",
+              "      <td>70</td>\n",
+              "      <td>9</td>\n",
+              "      <td>26</td>\n",
+              "      <td>2010</td>\n",
+              "      <td>70</td>\n",
+              "      <td>C</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>149</th>\n",
+              "      <td>150</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>145.0</td>\n",
+              "      <td>13.2</td>\n",
+              "      <td>77</td>\n",
+              "      <td>9</td>\n",
+              "      <td>27</td>\n",
+              "      <td>2010</td>\n",
+              "      <td>77</td>\n",
+              "      <td>PS</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>150</th>\n",
+              "      <td>151</td>\n",
+              "      <td>14.0</td>\n",
+              "      <td>191.0</td>\n",
+              "      <td>14.3</td>\n",
+              "      <td>75</td>\n",
+              "      <td>9</td>\n",
+              "      <td>28</td>\n",
+              "      <td>2010</td>\n",
+              "      <td>75</td>\n",
+              "      <td>S</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>151</th>\n",
+              "      <td>152</td>\n",
+              "      <td>18.0</td>\n",
+              "      <td>131.0</td>\n",
+              "      <td>8.0</td>\n",
+              "      <td>76</td>\n",
+              "      <td>9</td>\n",
+              "      <td>29</td>\n",
+              "      <td>2010</td>\n",
+              "      <td>76</td>\n",
+              "      <td>PS</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>152</th>\n",
+              "      <td>153</td>\n",
+              "      <td>20.0</td>\n",
+              "      <td>223.0</td>\n",
+              "      <td>11.5</td>\n",
+              "      <td>68</td>\n",
+              "      <td>9</td>\n",
+              "      <td>30</td>\n",
+              "      <td>2010</td>\n",
+              "      <td>68</td>\n",
+              "      <td>S</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>153</th>\n",
+              "      <td>154</td>\n",
+              "      <td>41.0</td>\n",
+              "      <td>190.0</td>\n",
+              "      <td>7.4</td>\n",
+              "      <td>67</td>\n",
+              "      <td>5</td>\n",
+              "      <td>1</td>\n",
+              "      <td>2010</td>\n",
+              "      <td>67</td>\n",
+              "      <td>C</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>154</th>\n",
+              "      <td>155</td>\n",
+              "      <td>30.0</td>\n",
+              "      <td>193.0</td>\n",
+              "      <td>6.9</td>\n",
+              "      <td>70</td>\n",
+              "      <td>9</td>\n",
+              "      <td>26</td>\n",
+              "      <td>2010</td>\n",
+              "      <td>70</td>\n",
+              "      <td>PS</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>155</th>\n",
+              "      <td>156</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>145.0</td>\n",
+              "      <td>13.2</td>\n",
+              "      <td>77</td>\n",
+              "      <td>9</td>\n",
+              "      <td>27</td>\n",
+              "      <td>2010</td>\n",
+              "      <td>77</td>\n",
+              "      <td>S</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>156</th>\n",
+              "      <td>157</td>\n",
+              "      <td>14.0</td>\n",
+              "      <td>191.0</td>\n",
+              "      <td>14.3</td>\n",
+              "      <td>75</td>\n",
+              "      <td>9</td>\n",
+              "      <td>28</td>\n",
+              "      <td>2010</td>\n",
+              "      <td>75</td>\n",
+              "      <td>S</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>157</th>\n",
+              "      <td>158</td>\n",
+              "      <td>18.0</td>\n",
+              "      <td>131.0</td>\n",
+              "      <td>8.0</td>\n",
+              "      <td>76</td>\n",
+              "      <td>9</td>\n",
+              "      <td>29</td>\n",
+              "      <td>2010</td>\n",
+              "      <td>76</td>\n",
+              "      <td>C</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "     Unnamed: 0  Ozone  Solar.R  Wind Temp C Month  Day  Year  Temp Weather\n",
+              "148         149   30.0    193.0   6.9     70     9   26  2010    70       C\n",
+              "149         150    NaN    145.0  13.2     77     9   27  2010    77      PS\n",
+              "150         151   14.0    191.0  14.3     75     9   28  2010    75       S\n",
+              "151         152   18.0    131.0   8.0     76     9   29  2010    76      PS\n",
+              "152         153   20.0    223.0  11.5     68     9   30  2010    68       S\n",
+              "153         154   41.0    190.0   7.4     67     5    1  2010    67       C\n",
+              "154         155   30.0    193.0   6.9     70     9   26  2010    70      PS\n",
+              "155         156    NaN    145.0  13.2     77     9   27  2010    77       S\n",
+              "156         157   14.0    191.0  14.3     75     9   28  2010    75       S\n",
+              "157         158   18.0    131.0   8.0     76     9   29  2010    76       C"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 7
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 417
+        },
+        "id": "EkJ1E6SKXioc",
+        "outputId": "557a7ea3-9f64-4686-987c-7c6e3de27871"
+      },
+      "source": [
+        "data1"
+      ],
+      "execution_count": 8,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>Unnamed: 0</th>\n",
+              "      <th>Ozone</th>\n",
+              "      <th>Solar.R</th>\n",
+              "      <th>Wind</th>\n",
+              "      <th>Temp C</th>\n",
+              "      <th>Month</th>\n",
+              "      <th>Day</th>\n",
+              "      <th>Year</th>\n",
+              "      <th>Temp</th>\n",
+              "      <th>Weather</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>1</td>\n",
+              "      <td>41.0</td>\n",
+              "      <td>190.0</td>\n",
+              "      <td>7.4</td>\n",
+              "      <td>67</td>\n",
+              "      <td>5</td>\n",
+              "      <td>1</td>\n",
+              "      <td>2010</td>\n",
+              "      <td>67</td>\n",
+              "      <td>S</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>2</td>\n",
+              "      <td>36.0</td>\n",
+              "      <td>118.0</td>\n",
+              "      <td>8.0</td>\n",
+              "      <td>72</td>\n",
+              "      <td>5</td>\n",
+              "      <td>2</td>\n",
+              "      <td>2010</td>\n",
+              "      <td>72</td>\n",
+              "      <td>C</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>3</td>\n",
+              "      <td>12.0</td>\n",
+              "      <td>149.0</td>\n",
+              "      <td>12.6</td>\n",
+              "      <td>74</td>\n",
+              "      <td>5</td>\n",
+              "      <td>3</td>\n",
+              "      <td>2010</td>\n",
+              "      <td>74</td>\n",
+              "      <td>PS</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>4</td>\n",
+              "      <td>18.0</td>\n",
+              "      <td>313.0</td>\n",
+              "      <td>11.5</td>\n",
+              "      <td>62</td>\n",
+              "      <td>5</td>\n",
+              "      <td>4</td>\n",
+              "      <td>2010</td>\n",
+              "      <td>62</td>\n",
+              "      <td>S</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>4</th>\n",
+              "      <td>5</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>14.3</td>\n",
+              "      <td>56</td>\n",
+              "      <td>5</td>\n",
+              "      <td>5</td>\n",
+              "      <td>2010</td>\n",
+              "      <td>56</td>\n",
+              "      <td>S</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>...</th>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>153</th>\n",
+              "      <td>154</td>\n",
+              "      <td>41.0</td>\n",
+              "      <td>190.0</td>\n",
+              "      <td>7.4</td>\n",
+              "      <td>67</td>\n",
+              "      <td>5</td>\n",
+              "      <td>1</td>\n",
+              "      <td>2010</td>\n",
+              "      <td>67</td>\n",
+              "      <td>C</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>154</th>\n",
+              "      <td>155</td>\n",
+              "      <td>30.0</td>\n",
+              "      <td>193.0</td>\n",
+              "      <td>6.9</td>\n",
+              "      <td>70</td>\n",
+              "      <td>9</td>\n",
+              "      <td>26</td>\n",
+              "      <td>2010</td>\n",
+              "      <td>70</td>\n",
+              "      <td>PS</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>155</th>\n",
+              "      <td>156</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>145.0</td>\n",
+              "      <td>13.2</td>\n",
+              "      <td>77</td>\n",
+              "      <td>9</td>\n",
+              "      <td>27</td>\n",
+              "      <td>2010</td>\n",
+              "      <td>77</td>\n",
+              "      <td>S</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>156</th>\n",
+              "      <td>157</td>\n",
+              "      <td>14.0</td>\n",
+              "      <td>191.0</td>\n",
+              "      <td>14.3</td>\n",
+              "      <td>75</td>\n",
+              "      <td>9</td>\n",
+              "      <td>28</td>\n",
+              "      <td>2010</td>\n",
+              "      <td>75</td>\n",
+              "      <td>S</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>157</th>\n",
+              "      <td>158</td>\n",
+              "      <td>18.0</td>\n",
+              "      <td>131.0</td>\n",
+              "      <td>8.0</td>\n",
+              "      <td>76</td>\n",
+              "      <td>9</td>\n",
+              "      <td>29</td>\n",
+              "      <td>2010</td>\n",
+              "      <td>76</td>\n",
+              "      <td>C</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "<p>158 rows × 10 columns</p>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "     Unnamed: 0  Ozone  Solar.R  Wind Temp C Month  Day  Year  Temp Weather\n",
+              "0             1   41.0    190.0   7.4     67     5    1  2010    67       S\n",
+              "1             2   36.0    118.0   8.0     72     5    2  2010    72       C\n",
+              "2             3   12.0    149.0  12.6     74     5    3  2010    74      PS\n",
+              "3             4   18.0    313.0  11.5     62     5    4  2010    62       S\n",
+              "4             5    NaN      NaN  14.3     56     5    5  2010    56       S\n",
+              "..          ...    ...      ...   ...    ...   ...  ...   ...   ...     ...\n",
+              "153         154   41.0    190.0   7.4     67     5    1  2010    67       C\n",
+              "154         155   30.0    193.0   6.9     70     9   26  2010    70      PS\n",
+              "155         156    NaN    145.0  13.2     77     9   27  2010    77       S\n",
+              "156         157   14.0    191.0  14.3     75     9   28  2010    75       S\n",
+              "157         158   18.0    131.0   8.0     76     9   29  2010    76       C\n",
+              "\n",
+              "[158 rows x 10 columns]"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 8
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "LGaBJxgXXioc"
+      },
+      "source": [
+        "#Data Structure \n",
+        "type(data1)\n",
+        "data1.shape"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "t2ACElD6Xiod"
+      },
+      "source": [
+        "#data types\n",
+        "data1.dtypes"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "8geOeUtYXioe"
+      },
+      "source": [
+        "# Data type conversion"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "aXEU-KgXXioe"
+      },
+      "source": [
+        "data1.info()"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "6p-D-MLOXiof"
+      },
+      "source": [
+        "data1"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "qybhCn9bXiog"
+      },
+      "source": [
+        "data2=data1.iloc[:,1:]"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "-HSceB7aXiog"
+      },
+      "source": [
+        "data2"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "JF6zmA_EXioh"
+      },
+      "source": [
+        "#The method .copy() is used here so that any changes made in new DataFrame don't get reflected in the original one\n",
+        "data=data2.copy()"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "cbP0uRgKXioh"
+      },
+      "source": [
+        "data['Month']=pd.to_numeric(data['Month'],errors='coerce')\n",
+        "data['Temp C']=pd.to_numeric(data['Temp C'],errors='coerce')# coerce will introduce NA values for non numeric data in the columns\n",
+        "data['Weather']=data['Weather'].astype('category')           #data['Wind']=data['Wind'].astype('int64')"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "wrPTJJP8Xioi"
+      },
+      "source": [
+        "data.info()"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "i8wGmneVXioj"
+      },
+      "source": [
+        "# Duplicates"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "1HxkNqpzXiok"
+      },
+      "source": [
+        "#Count of duplicated rows\n",
+        "data[data.duplicated()].shape"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "cV7DZFWZXiol"
+      },
+      "source": [
+        "data"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "zJjZNMAtXiom"
+      },
+      "source": [
+        "#Print the duplicated rows\n",
+        "data[data.duplicated()]"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "UORWdWKEXiom"
+      },
+      "source": [
+        "data_cleaned1=data.drop_duplicates()"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "cNaBrklZXioq"
+      },
+      "source": [
+        "data_cleaned1.shape"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "cxmTQspqXioq"
+      },
+      "source": [
+        "# Drop columns"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "lBYQqBdfXior"
+      },
+      "source": [
+        "data_cleaned2=data_cleaned1.drop('Temp C',axis=1)"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "8UxK047MXior"
+      },
+      "source": [
+        "data_cleaned2"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "f02LFCtTXios"
+      },
+      "source": [
+        "# Rename the columns"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "T-fwVF_LXios"
+      },
+      "source": [
+        "#rename the Solar column\n",
+        "data_cleaned3 = data_cleaned2.rename({'Solar.R': 'Solar'}, axis=1)"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "h6t33VCMXios"
+      },
+      "source": [
+        "data_cleaned3"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "35dVbn_gXiot"
+      },
+      "source": [
+        "# Outlier Detection"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "2j6KCCi4Xiot"
+      },
+      "source": [
+        "# histogram of Ozone\n",
+        "data_cleaned3['Ozone'].hist()"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "FohhG4AgXiot"
+      },
+      "source": [
+        "#Box plot\n",
+        "data_cleaned3.boxplot(column=['Ozone'])"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "PBN992cwXiou"
+      },
+      "source": [
+        "#Descriptive stat\n",
+        "data_cleaned3['Ozone'].describe()"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "_1KRAkTlXiou"
+      },
+      "source": [
+        "data_cleaned3"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "v1KVQzrEXiov"
+      },
+      "source": [
+        "#Bar plot\n",
+        "data['Weather'].value_counts().plot.bar()"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "cQWPkSyPXiov"
+      },
+      "source": [
+        "# Missing Values and Imputation"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "U_EzSV7mXiow"
+      },
+      "source": [
+        "import seaborn as sns\n",
+        "cols = data_cleaned3.columns \n",
+        "colours = ['#000099', '#ffff00'] # specify the colours - yellow is missing. blue is not missing.\n",
+        "sns.heatmap(data_cleaned3[cols].isnull(),\n",
+        "            cmap=sns.color_palette(colours))"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "N97zFiokXiow"
+      },
+      "source": [
+        "data_cleaned3[data_cleaned3.isnull().any(axis=1)].head()"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "96geEJlvXiow"
+      },
+      "source": [
+        "data_cleaned3.isnull().sum()"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "YlI_cZIbXiox"
+      },
+      "source": [
+        "#Mean Imputation\n",
+        "mean = data_cleaned3['Ozone'].mean()\n",
+        "print(mean)"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "WUYryO4TXiox"
+      },
+      "source": [
+        "data_cleaned3['Ozone'] = data_cleaned3['Ozone'].fillna(mean)"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "raJY3p7zXiox"
+      },
+      "source": [
+        "data_cleaned3"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "wmgWfkgOXioy"
+      },
+      "source": [
+        "#Missing value imputation for categorical vlaue\n",
+        "#Get the object columns\n",
+        "obj_columns=data_cleaned3[['Weather']]"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "G85pptqIXioy"
+      },
+      "source": [
+        "obj_columns.isnull().sum()"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "mC0xWL3MXioy"
+      },
+      "source": [
+        "#Missing value imputation for categorical vlaue\n",
+        "obj_columns=obj_columns.fillna(obj_columns.mode().iloc[0])"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "mvuuukJvXioz"
+      },
+      "source": [
+        "obj_columns.isnull().sum()"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "tmRJNnDGXio0"
+      },
+      "source": [
+        "data_cleaned3.shape"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "ABPKyKNJXio1"
+      },
+      "source": [
+        "obj_columns.shape"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "31SVwI0BXio1"
+      },
+      "source": [
+        "#Join the data set with imputed object dataset\n",
+        "data_cleaned4=pd.concat([data_cleaned3,obj_columns],axis=1)"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "otjPTr-qXio2"
+      },
+      "source": [
+        "data_cleaned4.isnull().sum()"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "1bgQDPkxXio3"
+      },
+      "source": [
+        "# Scatter plot and Correlation analysis"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "_0orphcUXio3"
+      },
+      "source": [
+        "# Seaborn visualization library\n",
+        "import seaborn as sns\n",
+        "# Create the default pairplot\n",
+        "sns.pairplot(data_cleaned3)"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "c4yekWj7Xio5"
+      },
+      "source": [
+        "#Correlation\n",
+        "data_cleaned3.corr()"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "asrAtklyXio5"
+      },
+      "source": [
+        "# Transformations"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "jd2pZf-wXio6"
+      },
+      "source": [
+        "#### Dummy Variable"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "OTWto3FmXio6"
+      },
+      "source": [
+        "#Creating dummy variable for Weather column\n",
+        "data_cleaned4=pd.get_dummies(data,columns=['Weather'])"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "J0BPeAwTXio7"
+      },
+      "source": [
+        "data_cleaned4"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "7mTVojYpXio8"
+      },
+      "source": [
+        "data_cleaned4=data_cleaned4.dropna()"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "TZ8MWG6tXio9"
+      },
+      "source": [
+        "#### Normalization of the data"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "uESjBkfUXio9"
+      },
+      "source": [
+        "#Normalization of the data\n",
+        "from numpy import set_printoptions\n",
+        "from sklearn.preprocessing import MinMaxScaler"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "iBkSGTq2Xio-"
+      },
+      "source": [
+        "data_cleaned4.values"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "8Rj41OikXio-"
+      },
+      "source": [
+        "array = data_cleaned3.values\n",
+        "\n",
+        "scaler = MinMaxScaler(feature_range=(0,1))\n",
+        "rescaledX = scaler.fit_transform(array[:,0:5])\n",
+        "\n",
+        "#transformed data\n",
+        "set_printoptions(precision=2)\n",
+        "print(rescaledX[0:5,:])\n"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "ogZmYwXlXio_"
+      },
+      "source": [
+        "# Standardize data (0 mean, 1 stdev)\n",
+        "from sklearn.preprocessing import StandardScaler"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "uu7dq76qXio_"
+      },
+      "source": [
+        "array = data_cleaned4.values\n",
+        "scaler = StandardScaler().fit(array)\n",
+        "rescaledX = scaler.transform(array)\n",
+        "\n",
+        "# summarize transformed data\n",
+        "set_printoptions(precision=2)\n",
+        "print(rescaledX[0:5,:])"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "bHOF2V_xXipA"
+      },
+      "source": [
+        "# Speed up the EDA process"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "Eqgmd6DQXipA"
+      },
+      "source": [
+        "EDA_report= pp.ProfileReport(data)\n",
+        "EDA_report.to_file(output_file='report.html')"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "wk_GBGOFXipB"
+      },
+      "source": [
+        "sweet_report = sv.analyze(data)\n",
+        "sweet_report.show_html('weather_report.html')"
+      ],
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
